@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Auth\RegistrationController;
 use App\Http\Controllers\Auth\TokenController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/register', RegistrationController::class)
+    ->middleware('guest')
+    ->name('register');
 
 Route::post('/login', [TokenController::class, 'store'])
     ->middleware('guest')
