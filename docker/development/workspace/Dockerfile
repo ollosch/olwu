@@ -47,6 +47,9 @@ RUN docker-php-ext-enable xdebug \
     && echo "xdebug.client_host=\${XDEBUG_HOST}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+RUN echo "memory_limit = 2G" >> /usr/local/etc/php/php.ini \
+ && echo "max_execution_time = 300" >> /usr/local/etc/php/php.ini
+
 RUN groupadd -g $GID www && useradd -u $UID -g $GID -m www
 
 USER www
