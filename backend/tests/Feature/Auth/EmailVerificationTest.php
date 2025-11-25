@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\getJson;
 
-test('email can be verified', function () {
+test('email can be verified', function (): void {
     $user = User::factory()->unverified()->create();
 
     Event::fake();
@@ -28,7 +27,7 @@ test('email can be verified', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
 });
 
-test('email is not verified with invalid hash', function () {
+test('email is not verified with invalid hash', function (): void {
     $user = User::factory()->unverified()->create();
 
     $verificationUrl = URL::temporarySignedRoute(
@@ -43,7 +42,7 @@ test('email is not verified with invalid hash', function () {
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
 });
 
-test('cannot access protected routes if not verified', function () {
+test('cannot access protected routes if not verified', function (): void {
     $user = User::factory()->unverified()->create();
 
     actingAs($user, 'sanctum')

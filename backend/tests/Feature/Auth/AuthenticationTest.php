@@ -9,7 +9,7 @@ use function Pest\Laravel\postJson;
 use function Pest\Laravel\withoutExceptionHandling;
 use function Pest\Laravel\withToken;
 
-beforeEach(function () {
+beforeEach(function (): void {
     $this->credentials = [
         'email' => 'test@example.com',
         'password' => 'password',
@@ -21,7 +21,7 @@ beforeEach(function () {
     ]);
 });
 
-it('can issue a personal API token', function () {
+it('can issue a personal API token', function (): void {
     withoutExceptionHandling();
     postJson(route('login'), $this->credentials)
         ->assertStatus(201)
@@ -33,7 +33,7 @@ it('can issue a personal API token', function () {
     ]);
 });
 
-test('users can not authenticate with invalid password', function () {
+test('users can not authenticate with invalid password', function (): void {
     postJson(route('login'), [
         'email' => $this->credentials['email'],
         'password' => 'wrong-password',
@@ -44,7 +44,7 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
-test('users can logout', function () {
+test('users can logout', function (): void {
     $response = postJson(route('login'), $this->credentials);
     $token = $response->json('token');
 

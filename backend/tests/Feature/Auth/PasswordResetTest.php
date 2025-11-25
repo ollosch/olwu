@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Notification;
 
 use function Pest\Laravel\postJson;
 
-test('reset password link can be requested', function () {
+test('reset password link can be requested', function (): void {
     Notification::fake();
 
     $user = User::factory()->create();
@@ -18,14 +18,14 @@ test('reset password link can be requested', function () {
     Notification::assertSentTo($user, ResetPassword::class);
 });
 
-test('password can be reset with valid token', function () {
+test('password can be reset with valid token', function (): void {
     Notification::fake();
 
     $user = User::factory()->create();
 
     postJson(route('password.email'), ['email' => $user->email]);
 
-    Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user) {
+    Notification::assertSentTo($user, ResetPassword::class, function (object $notification) use ($user): bool {
         $response = postJson(route('password.reset'), [
             'token' => $notification->token,
             'email' => $user->email,
