@@ -6,6 +6,7 @@ docker/**/log*
 .github
 
 .yaak
+.wakatime-project
 
 *ide_helper*php
 /tmp
