@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 final class RegistrationController
@@ -15,7 +15,7 @@ final class RegistrationController
     /**
      * Handle a registration request for the application.
      */
-    public function __invoke(RegisterRequest $request): Response
+    public function __invoke(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
             'name' => $request->name,
@@ -25,6 +25,8 @@ final class RegistrationController
 
         event(new Registered($user));
 
-        return response()->noContent();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json(['token' => $token], 201);
     }
 }
