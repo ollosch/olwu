@@ -1,10 +1,33 @@
 <script setup lang="ts">
+import router from '@/router'
+import { useForm } from 'vee-validate'
+import { useAuthStore, type RegisterRequest } from '@/stores/auth'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-
 import AuthLayout from './AuthLayout.vue'
+
+const auth = useAuthStore()
+const { defineField, handleSubmit, errors, setErrors } = useForm<RegisterRequest>()
+
+const [name, nameAttrs] = defineField('name')
+const [email, emailAttrs] = defineField('email')
+const [password, passwordAttrs] = defineField('password')
+const [passwordConfirmation, passwordConfirmationAttrs] = defineField('password_confirmation')
+
+const onSubmit = handleSubmit(async (values) => {
+  await auth.register(values)
+
+  if (auth.errors) {
+    setErrors(auth.errors)
+  }
+
+  if (auth.isAuthenticated) {
+    router.push({ name: 'dashboard' })
+  }
+})
 </script>
 
 <template>
@@ -15,30 +38,52 @@ import AuthLayout from './AuthLayout.vue'
         <CardDescription> Enter your information below to create your account </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form @submit.prevent="onSubmit">
           <FieldGroup>
             <Field>
               <FieldLabel for="name"> Name </FieldLabel>
-              <Input id="name" type="text" required />
+              <Input v-model="name" v-bind="nameAttrs" id="name" type="text" required />
+              <div v-if="errors.name">{{ errors.name }}</div>
             </Field>
             <Field>
               <FieldLabel for="email"> Email </FieldLabel>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input
+                v-model="email"
+                v-bind="emailAttrs"
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+              />
+              <div v-if="errors.email">{{ errors.email }}</div>
               <FieldDescription> We will not share your email with anyone else. </FieldDescription>
             </Field>
             <Field>
               <FieldLabel for="password"> Password </FieldLabel>
-              <Input id="password" type="password" required />
+              <Input
+                v-model="password"
+                v-bind="passwordAttrs"
+                id="password"
+                type="password"
+                required
+              />
+              <div v-if="errors.password">{{ errors.password }}</div>
               <FieldDescription>Must be at least 8 characters long.</FieldDescription>
             </Field>
             <Field>
               <FieldLabel for="confirm-password"> Confirm Password </FieldLabel>
-              <Input id="confirm-password" type="password" required />
+              <Input
+                v-model="passwordConfirmation"
+                v-bind="passwordConfirmationAttrs"
+                id="confirm-password"
+                type="password"
+                required
+              />
               <FieldDescription>Please confirm your password.</FieldDescription>
             </Field>
             <FieldGroup>
               <Field>
-                <Button type="submit"> Create Account </Button>
+                <Button :disabled="auth.loading" type="submit"> Create Account </Button>
                 <FieldDescription class="px-6 text-center">
                   Already have an account?
                   <router-link :to="{ name: 'login' }">Sign in</router-link>
