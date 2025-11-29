@@ -1,10 +1,31 @@
 <script setup lang="ts">
+import router from '@/router'
+import { useForm } from 'vee-validate'
+import { useAuthStore, type LoginRequest } from '@/stores/auth'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-
 import AuthLayout from './AuthLayout.vue'
+
+const auth = useAuthStore()
+const { defineField, handleSubmit, errors, setErrors } = useForm<LoginRequest>()
+
+const [email, emailAttrs] = defineField('email')
+const [password, passwordAttrs] = defineField('password')
+
+const onSubmit = handleSubmit(async (values) => {
+  await auth.login(values)
+
+  if (auth.errors) {
+    setErrors(auth.errors)
+  }
+
+  if (auth.isAuthenticated) {
+    router.push({ name: 'dashboard' })
+  }
+})
 </script>
 
 <template>
@@ -17,11 +38,19 @@ import AuthLayout from './AuthLayout.vue'
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form @submit.prevent="onSubmit">
           <FieldGroup>
             <Field>
               <FieldLabel for="email"> Email </FieldLabel>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input
+                v-model="email"
+                v-bind="emailAttrs"
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+              />
+              <div v-if="errors.email">{{ errors.email }}</div>
             </Field>
             <Field>
               <div class="flex items-center">
@@ -30,10 +59,17 @@ import AuthLayout from './AuthLayout.vue'
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                v-model="password"
+                v-bind="passwordAttrs"
+                id="password"
+                type="password"
+                required
+              />
             </Field>
+            <div v-if="errors.password">{{ errors.password }}</div>
             <Field>
-              <Button type="submit"> Login </Button>
+              <Button :disabled="auth.loading" type="submit"> Login </Button>
               <FieldDescription class="text-center">
                 Don't have an account?
                 <router-link :to="{ name: 'register' }"> Sign up </router-link>
