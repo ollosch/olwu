@@ -34,23 +34,23 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   const auth = useAuthStore()
 
-  if (!auth.isAuthenticated && auth.token) {
-    const isValid = await auth.check()
-    if (!isValid) {
+  if (!auth.user && auth.token) {
+    await auth.fetchUser()
+
+    if (!auth.user) {
       auth.clear()
     }
   }
 
-  const isAuthenticated = auth.isAuthenticated
   const requiresAuth = to.meta.requiresAuth
   const requiresGuest = to.meta.requiresGuest
 
-  if (requiresAuth && !isAuthenticated) {
+  if (requiresAuth && !auth.user) {
     return {
       name: 'login',
       query: { redirect: to.fullPath },
     }
-  } else if (requiresGuest && isAuthenticated) {
+  } else if (requiresGuest && auth.user) {
     return { name: 'dashboard' }
   }
 })
