@@ -28,7 +28,7 @@ onMounted(async () => {
     message.value = 'Your email has been verified successfully!'
 
     setTimeout(() => {
-      router.push({ name: 'dashboard' })
+      router.push({ name: 'systems' })
     }, 2000)
   } catch {
     status.value = 'error'

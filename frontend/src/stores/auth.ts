@@ -93,7 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function redirectIfAuthenticated() {
     if (user.value) {
-      router.push({ name: 'dashboard' })
+      router.push({ name: 'systems' })
     }
   }
 
