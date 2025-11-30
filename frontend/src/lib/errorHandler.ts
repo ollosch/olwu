@@ -9,7 +9,7 @@ export function handleHttpErrors(
 
   switch (status) {
     case 401: {
-      router.push('/login')
+      router.push({ name: 'login' })
       // toast('You are logged out. Please log in again.')
       return { type: 'auth', message }
     }
