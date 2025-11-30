@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
@@ -21,6 +22,8 @@ final class AppServiceProvider extends ServiceProvider
         $this->bootModelsDefaults();
 
         $this->setEmailVerificationUrl();
+
+        $this->setPasswordResetUrl();
     }
 
     private function bootModelsDefaults(): void
@@ -41,6 +44,16 @@ final class AppServiceProvider extends ServiceProvider
             );
 
             return config('app.frontend_url').'/verify-email?url='.urlencode($signed);
+        });
+    }
+
+    private function setPasswordResetUrl(): void
+    {
+        ResetPassword::createUrlUsing(function ($notifiable, string $token) {
+            return
+                config('app.frontend_url').
+                '/reset-password?token='.$token.
+                '&email='.urlencode($notifiable->getEmailForPasswordReset());
         });
     }
 }
