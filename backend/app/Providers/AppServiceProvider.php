@@ -7,6 +7,7 @@ namespace App\Providers;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,13 +34,13 @@ final class AppServiceProvider extends ServiceProvider
 
     private function setEmailVerificationUrl(): void
     {
-        VerifyEmail::createUrlUsing(function ($notifiable) {
+        VerifyEmail::createUrlUsing(function (Authenticatable $notifiable): string {
             $signed = URL::temporarySignedRoute(
                 'verification.verify',
                 now()->addMinutes(60),
                 [
                     'id' => $notifiable->getKey(),
-                    'hash' => sha1($notifiable->getEmailForVerification()),
+                    'hash' => sha1((string) $notifiable->getEmailForVerification()),
                 ]
             );
 
@@ -49,11 +50,9 @@ final class AppServiceProvider extends ServiceProvider
 
     private function setPasswordResetUrl(): void
     {
-        ResetPassword::createUrlUsing(function ($notifiable, string $token) {
-            return
-                config('app.frontend_url').
-                '/reset-password?token='.$token.
-                '&email='.urlencode($notifiable->getEmailForPasswordReset());
-        });
+        ResetPassword::createUrlUsing(fn (Authenticatable $notifiable, string $token): string =>
+            config('app.frontend_url').
+            '/reset-password?token='.$token.
+            '&email='.urlencode((string) $notifiable->getEmailForPasswordReset()));
     }
 }
