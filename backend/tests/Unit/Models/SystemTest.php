@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Module;
 use App\Models\System;
 use App\Models\User;
 use Carbon\CarbonImmutable;
@@ -37,4 +38,13 @@ test('belongs to owner', function (): void {
 
     expect($system->owner)->toBeInstanceOf(User::class)
         ->and($system->owner->id)->toBe($user->id);
+});
+
+test('has many modules', function (): void {
+    $system = System::factory()->create();
+    $modules = Module::factory()->count(2)->create(['system_id' => $system->id]);
+
+    expect($system->modules->count())->toBe(2)
+        ->and($system->modules->pluck('id')->toArray())
+        ->toMatchArray($modules->pluck('id')->toArray());
 });
