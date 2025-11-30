@@ -9,5 +9,6 @@ const { user } = useAuthStore()
   <AppLayout>
     <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
     <p>Welcome to your dashboard {{ user?.name }}!</p>
+    <div v-if="user">Email {{ user?.email_verified_at ? 'is' : 'not' }} verified</div>
   </AppLayout>
 </template>

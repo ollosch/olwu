@@ -13,4 +13,10 @@ export default [
     meta: { requiresGuest: true },
     component: () => import('@/views/Auth/RegisterView.vue'),
   },
+  {
+    path: '/verify-email',
+    name: 'verify-email',
+    meta: { requiresAuth: true },
+    component: () => import('@/views/Auth/VerifyEmailView.vue'),
+  },
 ]
