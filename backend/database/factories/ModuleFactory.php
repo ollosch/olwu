@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\ModuleTypes;
+use App\Models\Module;
 use App\Models\System;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\module>
+ * @extends Factory<Module>
  */
 final class ModuleFactory extends Factory
 {

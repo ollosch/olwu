@@ -24,11 +24,11 @@ final class System extends Model
     /** @use HasFactory<SystemFactory> */
     use HasFactory;
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
 
-        static::created(function (System $system): void {
+        self::created(function (System $system): void {
             $system->modules()->create([
                 'system_id' => $system->id,
                 'type' => 'core',

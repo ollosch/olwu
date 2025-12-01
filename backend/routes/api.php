@@ -11,7 +11,7 @@ Route::get('/me', fn (Request $request) => $request->user())
     ->middleware(['auth:sanctum'])
     ->name('me');
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function (): void {
     Route::apiResource('systems', SystemController::class);
     Route::apiResource('systems.modules', ModuleController::class)->scoped();
 });
