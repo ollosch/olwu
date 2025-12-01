@@ -43,12 +43,12 @@ test('belongs to owner', function (): void {
 
 test('has many modules', function (): void {
     $system = System::factory()->create();
-    $modules = Module::factory()->create(['system_id' => $system->id]);
+    $module = Module::factory()->create(['system_id' => $system->id]);
 
     expect($system->modules)->toHaveCount(2)
-        ->and($system->modules->first())->toBeInstanceOf(Module::class)
-        ->and($system->modules->pluck('id')->sort()->all())
-        ->toBe($modules->pluck('id')->sort()->all());
+        ->each
+        ->toBeInstanceOf(Module::class)
+        ->and($module->id)->toBeIn($system->modules->pluck('id'));
 });
 
 test('has many system indices', function (): void {
