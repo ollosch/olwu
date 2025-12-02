@@ -30,7 +30,7 @@ router.beforeEach(async (to) => {
   }
 
   if (requiresGuest && auth.user) {
-    return { name: 'dashboard' }
+    return { name: 'systems' }
   }
 })
 
