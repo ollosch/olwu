@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { useForm } from 'vee-validate'
+import router from '@/router'
 import { useAuthStore, type RegisterRequest } from '@/stores/auth'
+import { useForm } from 'vee-validate'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { toast } from 'vue-sonner'
 import AuthLayout from './AuthLayout.vue'
 
 const auth = useAuthStore()
@@ -21,7 +23,11 @@ const onSubmit = handleSubmit(async (values) => {
 
   if (auth.errors) {
     setErrors(auth.errors)
+    return
   }
+
+  toast.success('Registration successful! Please verify your email.')
+  router.push({ name: 'systems' })
 })
 </script>
 
