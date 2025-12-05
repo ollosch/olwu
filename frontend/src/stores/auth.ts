@@ -2,7 +2,6 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 import { useApi } from '@/composables/useApi'
-import router from '@/router'
 
 interface User {
   id: string
@@ -41,7 +40,6 @@ export const useAuthStore = defineStore('auth', () => {
     if (!errors.value) {
       storeToken(res.token)
       await fetchUser()
-      redirectIfAuthenticated()
     }
   }
 
@@ -51,15 +49,15 @@ export const useAuthStore = defineStore('auth', () => {
     if (!errors.value) {
       storeToken(res.token)
       await fetchUser()
-      // TODO: toast('Registration successful! Please verify your email.')
-      redirectIfAuthenticated()
     }
   }
 
   async function logout() {
-    await post('/logout')
-    clear()
-    router.push({ name: 'login' })
+    try {
+      await post('/logout')
+    } finally {
+      clear()
+    }
   }
 
   async function verifyEmail(url: string) {
@@ -88,12 +86,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (!user.value) {
       clear()
-    }
-  }
-
-  async function redirectIfAuthenticated() {
-    if (user.value) {
-      router.push({ name: 'systems' })
     }
   }
 

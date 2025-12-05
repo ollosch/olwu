@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useForm } from 'vee-validate'
+import router from '@/router'
 import { useAuthStore, type LoginRequest } from '@/stores/auth'
+import { useForm } from 'vee-validate'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -19,7 +20,10 @@ const onSubmit = handleSubmit(async (values) => {
 
   if (auth.errors) {
     setErrors(auth.errors)
+    return
   }
+
+  router.push({ name: 'systems' })
 })
 </script>
 
