@@ -12,7 +12,7 @@ interface System {
   updated_at: string
 }
 
-const { get, loading, errors } = useApi()
+const { get, loading } = useApi()
 
 const systems = ref<System[]>([])
 
@@ -23,7 +23,6 @@ onMounted(async () => {
 
 <template>
   <AppLayout>
-    {{ errors }}
     <div class="p-6">
       <div v-if="loading" class="flex justify-center items-center h-64">
         <div
