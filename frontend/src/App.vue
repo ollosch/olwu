@@ -1,5 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import 'vue-sonner/style.css'
+import { Toaster } from '@/components/ui/sonner'
+</script>
 
 <template>
-  <router-view class="dark bg-black text-green-400" />
+  <div>
+    <router-view class="dark bg-black text-green-400" />
+    <Toaster />
+  </div>
 </template>
