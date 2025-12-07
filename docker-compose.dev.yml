@@ -10,7 +10,7 @@ services:
     environment:
       - NGINX_HOST=localhost
     networks:
-      - olwu-dev
+      - olgur-dev
     depends_on:
       php-fpm:
         condition: service_started
@@ -35,7 +35,7 @@ services:
     volumes:
       - ${PWD}/backend:/var/www
     networks:
-      - olwu-dev
+      - olgur-dev
     depends_on:
       db:
         condition: service_started
@@ -45,14 +45,14 @@ services:
     ports:
       - "${MYSQL_PORT:-3306}:3306"
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-olwu}
-      MYSQL_USER: ${MYSQL_USER:-olwu}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-olgur}
+      MYSQL_USER: ${MYSQL_USER:-olgur}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-password}
     volumes:
-      - olwu-db-dev:/var/lib/mysql
+      - olgur-db-dev:/var/lib/mysql
     networks:
-      - olwu-dev
+      - olgur-dev
 
   workspace:
     build:
@@ -75,10 +75,10 @@ services:
     volumes:
       - ${PWD}/:/var/www
     networks:
-      - olwu-dev
+      - olgur-dev
 
 networks:
-  olwu-dev:
+  olgur-dev:
 
 volumes:
-  olwu-db-dev:
+  olgur-db-dev:

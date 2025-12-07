@@ -19,7 +19,7 @@ final class ImportGameSystemData extends Command implements PromptsForMissingInp
      *
      * @var string
      */
-    protected $signature = 'olwu:import
+    protected $signature = 'olgur:import
                             {name : The name of the system}
                             {folder : The folder containing the system data}';
 

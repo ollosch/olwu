@@ -16,7 +16,7 @@ final class DatabaseSeeder extends Seeder
     {
         $ollo = User::factory()->create([
             'name' => 'Ollo',
-            'email' => 'ollo@olwu.de',
+            'email' => 'ollo@olgur.de',
         ]);
 
         System::factory()->create([

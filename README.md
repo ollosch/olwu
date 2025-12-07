@@ -1,4 +1,4 @@
-# Olwu - Ollo's Wargame Utility
+# Olgur - Ollo's Game Utilty Repo
 
 ## Conventions
 ### Git Commits

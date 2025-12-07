@@ -31,7 +31,7 @@ const onSubmit = handleSubmit(async (values) => {
   <AuthLayout>
     <Card>
       <CardHeader>
-        <CardTitle>Login to Olwu</CardTitle>
+        <CardTitle>Login to Olgur</CardTitle>
         <CardDescription>
           Enter your email and password below to login to your account
         </CardDescription>
