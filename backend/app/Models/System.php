@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Role;
 use Carbon\CarbonInterface;
 use Database\Factories\SystemFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
@@ -70,5 +71,11 @@ final class System extends Model
     public function systemIndices(): HasMany
     {
         return $this->hasMany(SystemIndex::class);
+    }
+
+    /** @return HasMany<SystemIndex> */
+    public function roles(): HasMany
+    {
+        return $this->hasMany(Role::class);
     }
 }
