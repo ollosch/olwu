@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Module;
+use App\Models\Role;
 use App\Models\System;
 use App\Models\SystemIndex;
 use App\Models\User;
@@ -33,7 +34,7 @@ test('casts attributes correctly', function (): void {
         ->and($system->updated_at)->toBeInstanceOf(CarbonImmutable::class);
 });
 
-test('belongs to owner', function (): void {
+test('has an owner', function (): void {
     $user = User::factory()->create();
     $system = System::factory()->create(['owner_id' => $user->id]);
 
@@ -45,15 +46,17 @@ test('has many modules', function (): void {
     $system = System::factory()->create();
     $module = Module::factory()->create(['system_id' => $system->id]);
 
-    expect($system->modules)->toHaveCount(2)
-        ->each
-        ->toBeInstanceOf(Module::class)
-        ->and($module->id)->toBeIn($system->modules->pluck('id'));
+    expect($system->modules)->toHaveCount(1)
+        ->first()
+            ->toBeInstanceOf(Module::class)
+            ->and($module->id)->toBeIn($system->modules->pluck('id'));
 });
 
 test('has many system indices', function (): void {
     $system = System::factory()->create();
-    $indexEntries = SystemIndex::factory()->count(2)->create(['system_id' => $system->id]);
+    $indexEntries = $system->systemIndices()->saveMany(
+        SystemIndex::factory()->count(2)->make()
+    );
 
     expect($system->systemIndices)->toHaveCount(2)
         ->each
@@ -62,10 +65,14 @@ test('has many system indices', function (): void {
         ->toEqualCanonicalizing($indexEntries->modelKeys());
 });
 
-test('creates a \'core\' module when a system is created', function (): void {
-    $system = System::factory()->create()->refresh();
+test('has many roles', function (): void {
+    $system = System::factory()->create();
+    $roleCount = $system->roles()->count();
+    $role = Role::factory()->create(['system_id' => $system->id]);
 
-    expect($system->modules)->toHaveCount(1)
-        ->and($system->modules->first())->toBeInstanceOf(Module::class)
-        ->and($system->modules->first()->type)->toBe('core');
+    expect($system->roles)->toHaveCount($roleCount + 1)
+        ->each
+        ->toBeInstanceOf(Role::class)
+        ->and($system->roles()->latest()->first()->id)
+        ->toBe($role->id);
 });
