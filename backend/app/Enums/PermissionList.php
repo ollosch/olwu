@@ -51,6 +51,7 @@ enum PermissionList: string
     case EDIT_RULES = 'edit.rules';
     case DELETE_RULES = 'delete.rules';
 
+    /** @return array<PermissionList> */
     public static function casesByScope(string $scope): array
     {
         return match($scope) {

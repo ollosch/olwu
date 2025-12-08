@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Models\module;
+use App\Models\Module;
 use App\Models\System;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 final class ModulePolicy
 {
@@ -22,15 +23,15 @@ final class ModulePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, module $module): bool
+    public function view(User $user, Module $Module): bool
     {
 
         // TODO: Set up relations
         return DB::table('role_user')
             ->where('user_id', $user->id)
-            ->where('module_id', $module->id)
+            ->where('module_id', $Module->id)
             ->exists() ||
-            $user->can('view.any.module', $module->system);
+            $user->can('view.any.module', $Module->system);
     }
 
     /**
@@ -44,20 +45,20 @@ final class ModulePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, module $module): bool
+    public function update(User $user, Module $Module): bool
     {
         return
-            $user->can('edit.module', $module) ||
-            $user->can('edit.any.module', $module->system);
+            $user->can('edit.module', $Module) ||
+            $user->can('edit.any.module', $Module->system);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, module $module): bool
+    public function delete(User $user, Module $Module): bool
     {
         return
-            $user->can('delete.module', $module) ||
-            $user->can('delete.any.module', $module->system);
+            $user->can('delete.module', $Module) ||
+            $user->can('delete.any.module', $Module->system);
     }
 }

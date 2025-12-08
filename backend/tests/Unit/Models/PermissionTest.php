@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\PermissionList;
 use App\Models\Permission;
 
 test('to array', function (): void {

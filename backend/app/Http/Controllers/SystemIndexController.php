@@ -13,7 +13,7 @@ final class SystemIndexController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): void
     {
         //
     }
@@ -21,7 +21,7 @@ final class SystemIndexController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSystemIndexRequest $request)
+    public function store(StoreSystemIndexRequest $request): void
     {
         //
     }
@@ -29,7 +29,7 @@ final class SystemIndexController
     /**
      * Display the specified resource.
      */
-    public function show(SystemIndex $systemIndex)
+    public function show(SystemIndex $systemIndex): void
     {
         //
     }
@@ -37,7 +37,7 @@ final class SystemIndexController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSystemIndexRequest $request, SystemIndex $systemIndex)
+    public function update(UpdateSystemIndexRequest $request, SystemIndex $systemIndex): void
     {
         //
     }
@@ -45,7 +45,7 @@ final class SystemIndexController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SystemIndex $systemIndex)
+    public function destroy(SystemIndex $systemIndex): void
     {
         //
     }

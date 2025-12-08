@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 final class UpdateSystemRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize(): true
     {
         return true;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Enums\PermissionList;
 use App\Models\System;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +38,7 @@ final class SystemPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create.systems');
+        return $user->can(PermissionList::CREATE_SYSTEMS);
     }
 
     /**

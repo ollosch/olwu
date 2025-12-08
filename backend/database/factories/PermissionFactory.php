@@ -22,7 +22,7 @@ final class PermissionFactory extends Factory
     {
         return [
             'scope' => $this->faker->randomElement(['global', 'system', 'module']),
-            'name' => implode('.', $this->faker->words(2, false)),
+            'name' => implode('.', (array) $this->faker->words(2, false)),
         ];
     }
 }

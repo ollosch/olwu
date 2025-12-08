@@ -66,13 +66,13 @@ final class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    /** @return HasMany<System> */
+    /** @return HasMany<System, $this> */
     public function systems(): HasMany
     {
         return $this->hasMany(System::class, 'owner_id');
     }
 
-    /** @return BelongsToMany<Role> */
+    /** @return BelongsToMany<Role, $this> */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class);

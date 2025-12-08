@@ -74,9 +74,12 @@ final class ImportGameSystemData extends Command implements PromptsForMissingInp
         $shortName = $systemConfig['short_name'] ?? $systemName;
         $systemFiles = $systemConfig['files'] ?? [];
 
+        /** @var User $firstUser */
+        $firstUser = User::first();
+
         // Create system record
         $system = System::create([
-            'owner_id' => User::first()->id,
+            'owner_id' => $firstUser->id,
             'name' => $shortName,
             'description' => $name,
         ]);
@@ -91,6 +94,9 @@ final class ImportGameSystemData extends Command implements PromptsForMissingInp
         return self::SUCCESS;
     }
 
+    /**
+     * @param array<string, mixed> $systemFile
+     */
     private function importSystemFile(System $system, array $systemFile, string $systemFolder): void
     {
         $filePath = mb_rtrim($systemFolder, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$systemFile['path'];
@@ -113,7 +119,9 @@ final class ImportGameSystemData extends Command implements PromptsForMissingInp
 
         switch ($systemFile['type']) {
             case 'rules':
-                $count = $this->importRules($system->modules()->where('type', 'core')->first(), $json);
+                /** @var Module $module */
+                $module = $system->modules()->where('type', 'core')->firstOrFail();
+                $count = $this->importRules($module, $json);
                 $this->info("Imported {$count} rules.");
                 break;
 
@@ -136,6 +144,10 @@ final class ImportGameSystemData extends Command implements PromptsForMissingInp
         return $parts[0].'.'.implode('.', $mpathParts);
     }
 
+    /**
+     * @param Module $module
+     * @param array<string, mixed> $data
+     */
     private function importRules(Module $module, array $data): int
     {
         $counter = 0;
@@ -158,6 +170,10 @@ final class ImportGameSystemData extends Command implements PromptsForMissingInp
         return $counter;
     }
 
+    /**
+     * @param System $system
+     * @param array<string, mixed> $data
+     */
     private function importIndex(System $system, array $data): int
     {
         $counter = 0;

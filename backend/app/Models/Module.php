@@ -42,13 +42,13 @@ final class Module extends Model
         ];
     }
 
-    /** @return BelongsTo<System> */
+    /** @return BelongsTo<System, $this> */
     public function system(): BelongsTo
     {
         return $this->belongsTo(System::class);
     }
 
-    /** @return HasMany<Rule> */
+    /** @return HasMany<Rule, $this> */
     public function rules(): HasMany
     {
         return $this->hasMany(Rule::class);

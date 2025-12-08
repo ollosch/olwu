@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
@@ -15,12 +16,15 @@ final class VerifyEmailController
      */
     public function __invoke(EmailVerificationRequest $request): JsonResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
+        /** @var User $user */
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
             return response()->json(['status' => 'Email already verified']);
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
         }
 
         return response()->json(['status' => 'Email verified successfully']);

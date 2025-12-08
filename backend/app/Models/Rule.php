@@ -41,7 +41,7 @@ final class Rule extends Model
         ];
     }
 
-    /** @return BelongsTo<Module> */
+    /** @return BelongsTo<Module, $this> */
     public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);

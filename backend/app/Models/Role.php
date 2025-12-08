@@ -37,13 +37,13 @@ final class Role extends Model
         ];
     }
 
-    /** @return BelongsToMany<Permission> */
+    /** @return BelongsToMany<Permission, $this> */
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
     }
 
-    /** @return BelongsTo<System> */
+    /** @return BelongsTo<System, $this> */
     public function system(): BelongsTo
     {
         return $this->belongsTo(System::class);

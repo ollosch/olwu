@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Enums\PermissionList;
 use App\Models\Module;
 use App\Models\System;
 use App\Models\User;
+use BackedEnum;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Database\Eloquent\Model;
@@ -64,8 +66,9 @@ final class AppServiceProvider extends ServiceProvider
 
     private function bootAccessControl(): void
     {
-        Gate::before(function (User $user, string $ability, array $arguments) {
+        Gate::before(function (User $user, string|PermissionList $ability, array $arguments) {
             $context = $arguments[0] ?? null;
+            $ability = $ability instanceof PermissionList ? $ability->value : $ability;
 
             if ($context === null || $context instanceof System || $context instanceof Module) {
                 if ($user->hasPermissionTo($ability, $context)) {

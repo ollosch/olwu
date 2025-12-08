@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreModuleRequest;
-use App\Http\Requests\UpdatemoduleRequest;
+use App\Http\Requests\UpdateModuleRequest;
 use App\Models\Module;
 use App\Models\System;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +38,7 @@ final class ModuleController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatemoduleRequest $request, Module $module): JsonResponse
+    public function update(UpdateModuleRequest $request, Module $module): JsonResponse
     {
         Gate::authorize('update', $module);
 

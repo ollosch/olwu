@@ -41,25 +41,25 @@ final class System extends Model
         ];
     }
 
-    /** @return BelongsTo<User> */
+    /** @return BelongsTo<User, $this> */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    /** @return HasMany<Module> */
+    /** @return HasMany<Module, $this> */
     public function modules(): HasMany
     {
         return $this->hasMany(Module::class);
     }
 
-    /** @return HasMany<SystemIndex> */
+    /** @return HasMany<SystemIndex, $this> */
     public function systemIndices(): HasMany
     {
         return $this->hasMany(SystemIndex::class);
     }
 
-    /** @return HasMany<SystemIndex> */
+    /** @return HasMany<Role, $this> */
     public function roles(): HasMany
     {
         return $this->hasMany(Role::class);

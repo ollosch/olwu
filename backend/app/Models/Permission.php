@@ -17,9 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read string $name
  * @property-read CarbonInterface $created_at
  * @property-read CarbonInterface $updated_at
- * @method static Builder|static global()
- * @method static Builder|static system()
- * @method static Builder|static module()
+ * @method static Builder<static> global()
+ * @method static Builder<static> system()
+ * @method static Builder<static> module()
  */
 final class Permission extends Model
 {
@@ -39,18 +39,21 @@ final class Permission extends Model
         ];
     }
 
+    /** @param Builder<static> $query */
     #[Scope]
     protected function global(Builder $query): void
     {
         $query->where('scope', 'global');
     }
 
+    /** @param Builder<static> $query */
     #[Scope]
     protected function system(Builder $query): void
     {
         $query->where('scope', 'system');
     }
 
+    /** @param Builder<static> $query */
     #[Scope]
     protected function module(Builder $query): void
     {

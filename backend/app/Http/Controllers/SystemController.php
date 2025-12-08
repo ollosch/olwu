@@ -8,8 +8,9 @@ use App\Actions\CreateSystem;
 use App\Http\Requests\StoreSystemRequest;
 use App\Http\Requests\UpdateSystemRequest;
 use App\Models\System;
+use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 final class SystemController
@@ -17,21 +18,21 @@ final class SystemController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function index(#[CurrentUser] User $user): JsonResponse
     {
         Gate::authorize('viewAny', System::class);
 
-        return response()->json($request->user()->systems);
+        return response()->json($user->systems);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSystemRequest $request, CreateSystem $createSystem): JsonResponse
+    public function store(StoreSystemRequest $request, CreateSystem $createSystem, #[CurrentUser] User $user): JsonResponse
     {
         Gate::authorize('create', System::class);
 
-        $system = $createSystem->execute($request->user(), $request->validated());
+        $system = $createSystem->execute($user, $request->validated());
 
         return response()->json($system, 201);
     }

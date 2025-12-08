@@ -22,7 +22,6 @@ beforeEach(function (): void {
 });
 
 it('can issue a personal API token', function (): void {
-    withoutExceptionHandling();
     postJson(route('login'), $this->credentials)
         ->assertStatus(201)
         ->assertJsonStructure(['token']);
