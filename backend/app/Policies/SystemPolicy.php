@@ -6,6 +6,7 @@ namespace App\Policies;
 
 use App\Models\System;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 final class SystemPolicy
 {
@@ -14,7 +15,8 @@ final class SystemPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        // TODO: Not sure here
+        return $user->can('view.any.system');
     }
 
     /**
@@ -22,7 +24,12 @@ final class SystemPolicy
      */
     public function view(User $user, System $system): bool
     {
-        return true;
+        // TODO: Set up relations
+        return DB::table('role_user')
+            ->where('user_id', $user->id)
+            ->where('system_id', $system->id)
+            ->exists() ||
+            $user->can('view.any.system');
     }
 
     /**
@@ -30,7 +37,7 @@ final class SystemPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->can('create.systems');
     }
 
     /**
@@ -38,7 +45,9 @@ final class SystemPolicy
      */
     public function update(User $user, System $system): bool
     {
-        return true;
+        return
+            $user->can('edit.system', $system) ||
+            $user->can('edit.any.system');
     }
 
     /**
@@ -46,22 +55,8 @@ final class SystemPolicy
      */
     public function delete(User $user, System $system): bool
     {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, System $system): bool
-    {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, System $system): bool
-    {
-        return true;
+        return
+            $user->can('delete.system', $system) ||
+            $user->can('delete.any.system');
     }
 }

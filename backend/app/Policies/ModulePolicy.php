@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Policies;
 
 use App\Models\module;
+use App\Models\System;
 use App\Models\User;
 
 final class ModulePolicy
@@ -14,7 +15,8 @@ final class ModulePolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        // TODO: Not sure here
+        return $user->can('view.any.modules');
     }
 
     /**
@@ -22,15 +24,21 @@ final class ModulePolicy
      */
     public function view(User $user, module $module): bool
     {
-        return true;
+
+        // TODO: Set up relations
+        return DB::table('role_user')
+            ->where('user_id', $user->id)
+            ->where('module_id', $module->id)
+            ->exists() ||
+            $user->can('view.any.module', $module->system);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, System $system): bool
     {
-        return true;
+        return $user->can('create.modules', $system);
     }
 
     /**
@@ -38,7 +46,9 @@ final class ModulePolicy
      */
     public function update(User $user, module $module): bool
     {
-        return true;
+        return
+            $user->can('edit.module', $module) ||
+            $user->can('edit.any.module', $module->system);
     }
 
     /**
@@ -46,22 +56,8 @@ final class ModulePolicy
      */
     public function delete(User $user, module $module): bool
     {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, module $module): bool
-    {
-        return true;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, module $module): bool
-    {
-        return true;
+        return
+            $user->can('delete.module', $module) ||
+            $user->can('delete.any.module', $module->system);
     }
 }
