@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateSystem;
 use App\Http\Requests\StoreSystemRequest;
 use App\Http\Requests\UpdateSystemRequest;
 use App\Models\System;
@@ -26,11 +27,11 @@ final class SystemController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSystemRequest $request): JsonResponse
+    public function store(StoreSystemRequest $request, CreateSystem $createSystem): JsonResponse
     {
         Gate::authorize('create', System::class);
 
-        $system = $request->user()->systems()->create($request->validated());
+        $system = $createSystem->execute($request->user(), $request->validated());
 
         return response()->json($system, 201);
     }

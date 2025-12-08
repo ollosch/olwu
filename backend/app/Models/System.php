@@ -26,20 +26,6 @@ final class System extends Model
     /** @use HasFactory<SystemFactory> */
     use HasFactory, HasUlids;
 
-    public static function boot(): void
-    {
-        parent::boot();
-
-        self::created(function (System $system): void {
-            $system->modules()->create([
-                'system_id' => $system->id,
-                'type' => 'core',
-                'name' => 'Core Module',
-                'description' => 'This is the core module created automatically with the system.',
-            ]);
-        });
-    }
-
     /**
      * @return array<string, string>
      */
