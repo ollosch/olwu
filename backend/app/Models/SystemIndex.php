@@ -42,7 +42,7 @@ final class SystemIndex extends Model
         ];
     }
 
-        /** @return BelongsTo<System> */
+    /** @return BelongsTo<System> */
     public function system(): BelongsTo
     {
         return $this->belongsTo(System::class);
