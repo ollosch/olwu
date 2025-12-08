@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Module;
 use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -28,6 +31,15 @@ final class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, HasUlids, Notifiable;
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        self::created(function (User $user): void {
+            $user->assignRole('admin', null);
+        });
+    }
 
     /**
      * @var list<string>
@@ -58,5 +70,26 @@ final class User extends Authenticatable implements MustVerifyEmail
     public function systems(): HasMany
     {
         return $this->hasMany(System::class, 'owner_id');
+    }
+
+    /** @return BelongsToMany<Role> */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function assignRole(string $roleName, System|null $system): void
+    {
+        $query = Role::query()->where('name', $roleName);
+
+        if ($system) {
+            $query->where('system_id', $system->id);
+        } else {
+            $query->whereNull('system_id');
+        }
+
+        $role = $query->firstOrFail();
+
+        $this->roles()->attach($role->id, ['system_id' => $system->id ?? null]);
     }
 }
